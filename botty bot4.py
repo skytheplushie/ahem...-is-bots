@@ -4,12 +4,12 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 import asyncio
 
-api = ''
+api = '7680989311:AAEIRSxJCLJkGTza1H1Kci3e_m2LVRYwo3A'
 bot = Bot(token=api)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
 
-kb = ReplyKeyboardMarkup().resize_keyboard
+kb = ReplyKeyboardMarkup()
 button1 = KeyboardButton(text='Информация')
 button2 = KeyboardButton(text='Рассчитать каллории')
 kb.add(button1)
