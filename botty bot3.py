@@ -3,7 +3,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import State, StatesGroup
 import asyncio
 
-api = ''
+api = '7680989311:AAEIRSxJCLJkGTza1H1Kci3e_m2LVRYwo3A'
 bot = Bot(token=api)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
@@ -22,25 +22,23 @@ async def set_age(message):
 
 @dp.message_handler(state=[UserState.age])
 async def set_growth(message, state):
+    await state.update_data(set_age=message.text)
     await message.answer('Скажи свой рост')
-    await message.text.update_data(set_age=message.text)
     await UserState.growth.set()
 
 
 @dp.message_handler(state=[UserState.growth])
 async def set_weight(message, state):
+    await state.update_data(set_growth=message.text)
     await message.answer('Скажи свой вес')
-    await message.text.update_data(set_growth=message.text)
     await UserState.weight.set()
 
 
 @dp.message_handler(state=UserState.weight)
 async def send_calories(message, state):
-    await message.text.update_data(set_weight=message.text)
+    await state.update_data(set_weight=message.text)
     data = await state.get_data()
-    await message.answer(f'ваши возраст, рост и вес {data["age"]}, {data["growth"]} и {data["weight"]}. Ведётся подсчёт'
-                         f', пожалуйста, подождите')
-    await message.answer(f'результаты подсчёта: {10 * data["weight"] + 6.25 * data["growth"] - 5 * data["age"] + 5}')
+    await message.answer(f'{10 * int(data["set_weight"]) + 6.25 * int(data["set_growth"]) - 5 * int(data["set_age"]) + 5}')
     await state.finish()
 
 
