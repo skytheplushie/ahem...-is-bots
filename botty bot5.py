@@ -5,7 +5,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import asyncio
 
-api = ''
+api = '7680989311:AAEIRSxJCLJkGTza1H1Kci3e_m2LVRYwo3A'
 bot = Bot(token=api)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
@@ -54,6 +54,7 @@ class UserState(StatesGroup):
 @dp.callback_query_handler(call=['calories'])
 async def set_age(call):
     await call.message.answer('Скажи свой возраст')
+    await call.answer()
     await UserState.age.set()
 
 
