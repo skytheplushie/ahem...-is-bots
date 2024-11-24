@@ -5,7 +5,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import asyncio
 
-api = ""
+api = "7680989311:AAEIRSxJCLJkGTza1H1Kci3e_m2LVRYwo3A"
 bot = Bot(token=api)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
@@ -35,26 +35,19 @@ inline_choices = InlineKeyboardMarkup(
 inline_menu = InlineKeyboardMarkup(
     inline_keyboard=[
         [
-            InlineKeyboardButton('Product1', callback_data='product_buying'),
-            InlineKeyboardButton('Product2', callback_data='product_buying'),
-            InlineKeyboardButton('Product3', callback_data='product_buying'),
-            InlineKeyboardButton('Product4', callback_data='product_buying')
+            InlineKeyboardButton('Product1', callback_data='product1_buying'),
+            InlineKeyboardButton('Product2', callback_data='product2_buying'),
+            InlineKeyboardButton('Product3', callback_data='product3_buying'),
+            InlineKeyboardButton('Product4', callback_data='product4_buying')
         ]
     ]
 )
 
 
-@dp.message_handler(text='Купить')
-async def get_buying_list(message):
-    for num in range(1, 5):
-        await message.answer(f'Название: Product{num} | Описание: описание {num} | '
-                             f'Цена: {num * 100}')
-    await message.answer('Выберите продукт для покупки:', reply_markup=inline_menu)
-
-
-@dp.callback_query_handler(text='product_buying')
+@dp.callback_query_handler(lambda call: call.data.endswith('_buying'))
 async def send_confirm_message(call):
-    await call.message.answer('Вы успешно приобрели продукт!')
+    product_name = call.data.split('_')[0]  # Получаем имя продукта из callback_data
+    await call.message.answer(f'Вы успешно приобрели {product_name}!')
     await call.answer()
 
 
