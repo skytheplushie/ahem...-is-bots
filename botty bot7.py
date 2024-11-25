@@ -48,8 +48,8 @@ inline_menu = InlineKeyboardMarkup(
 @dp.message_handler(text='Купить')
 async def get_buying_list(message):
     for index, product in enumerate(get_all_products()):
-        await get_all_products()
-        await message.answer(f"Название: {} | Описание: {} | Цена: {}")
+        await message.answer(f"Название:{product[1]} | Описание:{product[2]} | Цена: {product[3]}")
+    await message.answer('Выберите продукцию')
 
 
 @dp.callback_query_handler(lambda call: call.data.endswith('_buying'))
