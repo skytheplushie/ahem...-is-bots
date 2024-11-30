@@ -39,7 +39,11 @@ inline_menu = InlineKeyboardMarkup(
             InlineKeyboardButton('Product1', callback_data='product1_buying'),
             InlineKeyboardButton('Product2', callback_data='product2_buying'),
             InlineKeyboardButton('Product3', callback_data='product3_buying'),
-            InlineKeyboardButton('Product4', callback_data='product4_buying')
+            InlineKeyboardButton('Product4', callback_data='product4_buying'),
+            InlineKeyboardButton('Product5', callback_data='product5_buying'),
+            InlineKeyboardButton('Product6', callback_data='product6_buying'),
+            InlineKeyboardButton('Product7', callback_data='product7_buying'),
+            InlineKeyboardButton('Product8', callback_data='product8_buying')
         ]
     ]
 )
