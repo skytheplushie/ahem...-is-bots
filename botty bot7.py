@@ -17,12 +17,18 @@ class UserState(StatesGroup):
     age = State()
 
 
-menu = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='Рассчитать'),
-                                      KeyboardButton(text='Информация'),]
-                                     ],
-                           resize_keyboard=True)
+class RegistrationState(StatesGroup):
+    username = State()
+    email = State()
+    age = State()
+    balance = State('1000')
 
-menu.add(KeyboardButton(text='Купить'))
+
+menu = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='Рассчитать'),
+                                      KeyboardButton(text='Информация'),
+                                     KeyboardButton(text='Купить'),
+                                      KeyboardButton(text='Регистрация')]],
+                           resize_keyboard=True)
 
 inline_choices = InlineKeyboardMarkup(
     inline_keyboard=[
@@ -54,6 +60,42 @@ async def get_buying_list(message):
     for index, product in enumerate(get_all_products()):
         await message.answer(f"Название:{product[1]} | Описание:{product[2]} | Цена: {product[3]}")
     await message.answer('Выберите продукцию')
+
+
+@dp.message_handler(text='Регистрация')
+async def sign_up(message):
+    await message.answer('Введите ваше имя:')
+    await RegistrationState.username.set()
+
+
+@dp.message_handler(state=RegistrationState.username)
+async def set_username(message, state):
+    if not is_included(message.text):
+        await state.update_data(username=message.text)
+        await message.answer('Введите вашу электронную почту:')
+        await RegistrationState.email.set()
+    else:
+        await message.answer('Имя занято. Пожалуйста выберете другое.')
+        await RegistrationState.username.set()
+
+
+@dp.message_handler(state=RegistrationState.email)
+async def set_email(message, state):
+    await state.update_data(email=message.text)
+    await message.answer('Введите ваш возраст')
+    await RegistrationState.age.set()
+
+
+@dp.message_handler(state=RegistrationState.age)
+async def set_age(message, state):
+    if 120 >= int(message.text) >= 0:
+        await state.update_data(age=message.text)
+        data = await state.get_data()
+        add_user(data['username'], data['email'], data['age'])
+        await message.answer('Регистрация успешно завершена!')
+    else:
+        await message.answer('Введите корректный возраст!')
+        await RegistrationState.age.set()
 
 
 @dp.callback_query_handler(lambda call: call.data.endswith('_buying'))
